@@ -11,15 +11,8 @@ class JMDSuperEncryption {
         byte[] keyBytes = key.toByteArray();
 
         for (int i = 0; i < text.length(); i++) {
-            if (Character.isUpperCase(text.charAt(i))) {
-                char ch = (char) (((int) text.charAt(i) +
-                        keyBytes[i % (keyBytes.length - 1)] - 65) % 256 + 65);
-                result.append(ch);
-            } else {
-                char ch = (char) (((int) text.charAt(i) +
-                        keyBytes[i % (keyBytes.length - 1)] - 97) % 256 + 97);
-                result.append(ch);
-            }
+            char ch = (char) (((int) text.charAt(i) + keyBytes[i % (keyBytes.length - 1)]));
+            result.append(ch);
         }
         return result;
     }
@@ -34,15 +27,8 @@ class JMDSuperEncryption {
         }
 
         for (int i = 0; i < cipher.length(); i++) {
-            if (Character.isUpperCase(cipher.charAt(i))) {
-                char ch = (char) (((int) cipher.charAt(i) +
-                        keyBytes[i % (keyBytes.length - 1)] - 65) % 256 + 65);
-                result.append(ch);
-            } else {
-                char ch = (char) (((int) cipher.charAt(i) +
-                        keyBytes[i % (keyBytes.length - 1)] - 97) % 256 + 97);
-                result.append(ch);
-            }
+            char ch = (char) (((int) cipher.charAt(i) + keyBytes[i % (keyBytes.length - 1)]));
+            result.append(ch);
         }
         return result;
     }
