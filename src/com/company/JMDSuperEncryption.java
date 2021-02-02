@@ -12,13 +12,14 @@ class JMDSuperEncryption {
 
         byte[] keyBytes = key.toByteArray();
 
-        shiftKey(keyBytes);
+        distortKey(keyBytes);
 
         if (keyBytes.length > text.length()) {
             Character[] distinctChars = distinctChars(text.toCharArray());
             // Add salt
-            for (int i = 0; i < keyBytes.length - text.length(); i++) {
-                var random = new SecureRandom();
+            var random = new SecureRandom();
+            int missingCharsCount = keyBytes.length - text.length();
+            for (int i = 0; i < missingCharsCount; i++) {
                 int randomIndex = random.nextInt(distinctChars.length);
                 text += distinctChars[randomIndex];
             }
@@ -37,7 +38,7 @@ class JMDSuperEncryption {
 
         byte[] keyBytes = key.toByteArray();
 
-        shiftKey(keyBytes);
+        distortKey(keyBytes);
 
         for (int i = 0; i < cipher.length(); i++) {
             char ch = (char) (((int) cipher.charAt(i) - keyBytes[i % (keyBytes.length - 1)]));
@@ -49,11 +50,11 @@ class JMDSuperEncryption {
     }
 
     /**
-     * Shifts each byte in the key by the length of the string.
-     * Alternates alternates between (+) and (-).
+     * Shifts each byte in the key by the length of the string (first index).
+     * Alternates between (+) and (-).
      * @param key byte representation of the key
      */
-    private static void shiftKey(byte[] key) {
+    private static void distortKey(byte[] key) {
         for (int i = 1; i < key.length; i++) {
             if (i % 2 == 0)
                 key[i] += key[0];
@@ -85,7 +86,7 @@ class JMDSuperEncryption {
     public static void main(String[] args) {
         String originalText = "Testing JMDSuperEncryption!";
 
-        BigInteger key = generateKey(50, originalText);
+        BigInteger key = generateKey(128, originalText);
 
         System.out.println("Key: " + key);
         System.out.println("Key Bytes: " + Arrays.toString(key.toByteArray()));
